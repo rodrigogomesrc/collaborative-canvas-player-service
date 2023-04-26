@@ -23,6 +23,12 @@ public class Player {
 		this.password = password;
 		this.paintedPixels = paintedPixels;
 	}
+    public Player(long id, String name, String password) {
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.paintedPixels = 0;
+	}
 	
 	public long getId() {
 		return id;
