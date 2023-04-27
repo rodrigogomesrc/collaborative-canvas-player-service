@@ -1,35 +1,23 @@
-version: '3.9'
-
-networks:
-  player-network:
-    name: player-services
-
+version: '3.1'
 services:
+  player-service:
+    container_name: player-service
+    build: ../
+    ports:
+      - "8085:8080"
+    depends_on:
+      - player-database
+    restart: always
+
   player-database:
     image: postgres:11
     container_name: player-database
-    ports:
-      - "5435:5432"
     volumes:
       - ${POSTGRESQL_PATH}:/var/lib/postgresql/data
-    networks:
-      - player-network
-    environment:
-      TZ: America/Fortaleza
-      POSTGRES_DB: ${POSTGRESQL_DATABASE}
-      POSTGRES_USER: ${POSTGRESQL_USERNAME}
-      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
-    restart: always
-
-  player-service:
-    build: ../
-    container_name: player-service
     ports:
-      - "8085:8080"
-    networks:
-        - player-network
-    depends_on:
-        - player-database
-    env_file:
-      - .env
+      - "5435:5432"
+    environment:
+      - POSTGRES_PASSWORD=player
+      - POSTGRES_USER=player123
+      - POSTGRES_DB=player
     restart: always
