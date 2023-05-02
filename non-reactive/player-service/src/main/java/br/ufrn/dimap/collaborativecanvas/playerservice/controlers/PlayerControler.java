@@ -45,9 +45,12 @@ public class PlayerControler {
 
 
     @PostMapping
-    public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
-        Player newPlayer = playerRepository.save(player);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newPlayer);
+    public ResponseEntity<Player> addPlayer(@RequestBody LoginDTO player) {
+        Player newPlayer = new Player();
+        newPlayer.setName(player.getName());
+        newPlayer.setPassword(player.getPassword());
+        Player createdPlayer = playerRepository.save(newPlayer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPlayer);
     }
 
     @PutMapping("/{id}")

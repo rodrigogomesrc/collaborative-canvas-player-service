@@ -15,6 +15,7 @@ public class Player {
 	private int paintedPixels;
 
 	public Player() {
+		this.paintedPixels = 0;
 	}
 	
 	public Player(long id, String name, String password, int paintedPixels) {
