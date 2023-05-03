@@ -1,7 +1,7 @@
 package br.ufrn.dimap.collaborativecanvas.playerservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 
 @Entity
 @Table
@@ -11,6 +11,7 @@ public class Player {
 	@GeneratedValue
 	private long id;
 	private String name;
+	@JsonIgnore
 	private String password;
 	private int paintedPixels;
 
