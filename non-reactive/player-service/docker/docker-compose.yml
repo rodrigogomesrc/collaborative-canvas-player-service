@@ -17,7 +17,7 @@ services:
     ports:
       - "5435:5432"
     environment:
-      - POSTGRES_PASSWORD=player
-      - POSTGRES_USER=player123
+      - POSTGRES_PASSWORD=player123
+      - POSTGRES_USER=player
       - POSTGRES_DB=player
     restart: always
