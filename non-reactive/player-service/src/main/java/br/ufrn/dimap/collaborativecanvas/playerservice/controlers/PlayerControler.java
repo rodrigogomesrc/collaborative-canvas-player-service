@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.ufrn.dimap.collaborativecanvas.playerservice.models.JogadaPlayerDTO;
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.LoginDTO;
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.Player;
 import br.ufrn.dimap.collaborativecanvas.playerservice.repository.PlayerRepository;
@@ -32,11 +33,6 @@ public class PlayerControler {
         }
     }
 
-    @GetMapping("/hello")
-    public String Hello() {
-        return "Hello world";
-    } 
-
     @GetMapping
     public ResponseEntity<List<Player>> getAllPlayers() {
         List<Player> players = playerRepository.findAll();
@@ -58,6 +54,18 @@ public class PlayerControler {
         Optional<Player> existingPlayer = playerRepository.findById(id);
         if (existingPlayer.isPresent()) {
             player.setId(id);
+            Player updatedPlayer = playerRepository.save(player);
+            return ResponseEntity.ok(updatedPlayer);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("/play")
+    public ResponseEntity<Player> updatePlayerMove(@RequestBody JogadaPlayerDTO jogada) {
+        Optional<Player> existingPlayer = playerRepository.findById(jogada.getId());
+        if (existingPlayer.isPresent()) {
+            Player player = existingPlayer.get();
+            player.setPaintedPixels(player.getPaintedPixels() + 1);
             Player updatedPlayer = playerRepository.save(player);
             return ResponseEntity.ok(updatedPlayer);
         } else {
