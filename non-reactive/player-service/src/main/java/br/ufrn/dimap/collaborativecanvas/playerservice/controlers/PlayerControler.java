@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.JogadaPlayerDTO;
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.LoginDTO;
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.Player;
-import br.ufrn.dimap.collaborativecanvas.playerservice.repository.PlayerRepository;
+import br.ufrn.dimap.collaborativecanvas.playerservice.service.PlayerService;
 
 
 @RestController
@@ -20,14 +20,13 @@ import br.ufrn.dimap.collaborativecanvas.playerservice.repository.PlayerReposito
 public class PlayerControler {
 
     @Autowired
-    private PlayerRepository playerRepository;
-    
+    private PlayerService playerService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Player> getPlayerById(@PathVariable Long id) {
-        Optional<Player> player = playerRepository.findById(id);
-        if (player.isPresent()) {
-            return ResponseEntity.ok(player.get());
+        Player player = playerService.getPlayerById(id);
+        if (player != null) {
+            return ResponseEntity.ok(player);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -35,26 +34,26 @@ public class PlayerControler {
 
     @GetMapping
     public ResponseEntity<List<Player>> getAllPlayers() {
-        List<Player> players = playerRepository.findAll();
+        List<Player> players = playerService.getAllPlayers();
         return ResponseEntity.ok(players);
     }
 
 
     @PostMapping
     public ResponseEntity<Player> addPlayer(@RequestBody LoginDTO player) {
-        Player newPlayer = new Player();
-        newPlayer.setName(player.getName());
-        newPlayer.setPassword(player.getPassword());
-        Player createdPlayer = playerRepository.save(newPlayer);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPlayer);
+        Player playerCreated = playerService.addPlayer(player);
+        if (playerCreated != null){
+            return ResponseEntity.status(HttpStatus.CREATED).body(playerCreated);
+        } else{
+            return ResponseEntity.badRequest().build();
+        }
+        
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Player> updatePlayer(@PathVariable Long id, @RequestBody Player player) {
-        Optional<Player> existingPlayer = playerRepository.findById(id);
-        if (existingPlayer.isPresent()) {
-            player.setId(id);
-            Player updatedPlayer = playerRepository.save(player);
+        Player updatedPlayer = playerService.updatePlayer(id, player);
+        if (updatedPlayer != null) {
             return ResponseEntity.ok(updatedPlayer);
         } else {
             return ResponseEntity.notFound().build();
@@ -62,11 +61,8 @@ public class PlayerControler {
     }
     @PutMapping("/play")
     public ResponseEntity<Player> updatePlayerMove(@RequestBody JogadaPlayerDTO jogada) {
-        Optional<Player> existingPlayer = playerRepository.findById(jogada.getId());
-        if (existingPlayer.isPresent()) {
-            Player player = existingPlayer.get();
-            player.setPaintedPixels(player.getPaintedPixels() + 1);
-            Player updatedPlayer = playerRepository.save(player);
+        Player updatedPlayer = playerService.updatePlayerMove(jogada);
+        if (updatedPlayer != null) {
             return ResponseEntity.ok(updatedPlayer);
         } else {
             return ResponseEntity.notFound().build();
@@ -75,9 +71,7 @@ public class PlayerControler {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
-        Optional<Player> existingPlayer = playerRepository.findById(id);
-        if (existingPlayer.isPresent()) {
-            playerRepository.delete(existingPlayer.get());
+        if (playerService.deletePlayer(id)) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -86,13 +80,9 @@ public class PlayerControler {
 
     @PostMapping("/login")
     public ResponseEntity<HashMap<String, Long>> login(@RequestBody LoginDTO login) {
-        String name = login.getName();
-        String password = login.getPassword();
-        Player player = playerRepository.findByNameAndPassword(name, password);
-        if (player != null) {
-            HashMap<String, Long> map = new HashMap<>();
-            map.put("id", player.getId());
-            return ResponseEntity.ok(map);
+        HashMap<String, Long>  playerLogin = playerService.logar(login);
+        if (playerLogin != null) {
+            return ResponseEntity.ok(playerLogin);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -100,7 +90,7 @@ public class PlayerControler {
     }
     @GetMapping("/ranking")
     public ResponseEntity<List<Player>> getAllPlayersByRanking() {
-        List<Player> players = playerRepository.findAllByOrderByPaintedPixelsDesc();
+        List<Player> players = playerService.getAllPlayersByRanking();
         return ResponseEntity.ok(players);
     }
     
