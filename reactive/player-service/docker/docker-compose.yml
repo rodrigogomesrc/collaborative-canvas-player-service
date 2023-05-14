@@ -1,0 +1,23 @@
+version: '3.1'
+services:
+  player-service:
+    container_name: player-service
+    build: ../
+    ports:
+      - "8085:8080"
+    depends_on:
+      - player-database
+    restart: always
+
+  player-database:
+    image: postgres:11
+    container_name: player-database
+    volumes:
+      - ${POSTGRESQL_PATH}:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_PASSWORD=player123
+      - POSTGRES_USER=player
+      - POSTGRES_DB=player
+    restart: always
