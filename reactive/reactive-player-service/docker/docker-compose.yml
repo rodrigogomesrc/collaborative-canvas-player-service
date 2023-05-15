@@ -1,0 +1,24 @@
+version: '3.1'
+services:
+  player-service-reactive:
+    container_name: player-service-reactive
+    build: ../
+    ports:
+      - "8085:8080"
+    depends_on:
+      - player-database-reactive
+    restart: always
+
+  player-database-reactive:
+    image: postgres:11
+    container_name: player-database-reactive
+    volumes:
+      - ./player-database:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_PASSWORD=player123
+      - POSTGRES_USER=player
+      - POSTGRES_DB=player
+    restart: always

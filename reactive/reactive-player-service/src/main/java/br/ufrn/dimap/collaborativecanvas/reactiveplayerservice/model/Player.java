@@ -1,18 +1,25 @@
-package br.ufrn.dimap.collaborativecanvas.playerservice.models;
+package br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.model;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 
-@Entity
+import lombok.Data;
+
 @Table
+@Data
 public class Player {
-	
 	@Id
-	@GeneratedValue
 	private Long id;
+	@Column
 	private String name;
-	@JsonIgnore
+	
+	
+	@Column
 	private String password;
+	@Column("painted_pixels")
 	private int paintedPixels;
 
 	public Player() {
@@ -59,5 +66,3 @@ public class Player {
 	
 	
 }
-
-	

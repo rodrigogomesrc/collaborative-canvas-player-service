@@ -15,9 +15,9 @@ public class DataLoader implements ApplicationRunner{
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        player.save(new Player(1, "joao", "joao123"));
-        player.save(new Player(2, "jose", "jose123"));
-        player.save(new Player(3, "maria", "maria123"));
+        player.save(new Player((long) 1, "joao", "joao123"));
+        player.save(new Player((long) 2, "jose", "jose123"));
+        player.save(new Player((long) 3, "maria", "maria123"));
         
     }
     

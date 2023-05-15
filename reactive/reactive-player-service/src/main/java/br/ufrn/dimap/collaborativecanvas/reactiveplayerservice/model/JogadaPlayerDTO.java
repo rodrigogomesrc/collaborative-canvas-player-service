@@ -1,4 +1,4 @@
-package br.ufrn.dimap.collaborativecanvas.playerservice.models;
+package br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.model;
 
 public class JogadaPlayerDTO {
     private Long id;
