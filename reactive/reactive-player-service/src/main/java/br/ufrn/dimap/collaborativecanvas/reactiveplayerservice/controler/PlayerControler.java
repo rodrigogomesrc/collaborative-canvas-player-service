@@ -58,7 +58,7 @@ public class PlayerControler {
     public Mono<Void> deletePlayer(@PathVariable Long id) {
         return playerService.deletePlayer(id);
     }
-    @PutMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/play")
+    @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/play")
     public Mono<Player> updatePlayerMove(@RequestBody JogadaPlayerDTO jogada) {
         return playerService.updatePlayerMove(jogada);
        
