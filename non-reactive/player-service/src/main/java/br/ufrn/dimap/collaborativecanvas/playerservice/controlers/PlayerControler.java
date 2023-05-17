@@ -59,7 +59,7 @@ public class PlayerControler {
             return ResponseEntity.notFound().build();
         }
     }
-    @PutMapping("/play")
+    @PostMapping("/play")
     public ResponseEntity<Player> updatePlayerMove(@RequestBody JogadaPlayerDTO jogada) {
         Player updatedPlayer = playerService.updatePlayerMove(jogada);
         if (updatedPlayer != null) {
