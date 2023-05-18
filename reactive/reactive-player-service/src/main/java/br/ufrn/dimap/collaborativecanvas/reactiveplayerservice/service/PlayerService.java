@@ -3,6 +3,8 @@ package br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.model.Player;
 import br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.repository.PlayerRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 
@@ -25,6 +28,10 @@ public class PlayerService {
 	
 	@Autowired
 	PlayerRepository playerRepository;
+	
+	private final ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+    private final Scheduler virtualScheduler = Schedulers.fromExecutorService(executorService);
+    
 	
 	public Mono<Player> getPlayerById(Long id){
         return playerRepository.findById(id)
