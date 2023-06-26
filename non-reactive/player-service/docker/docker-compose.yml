@@ -1,13 +1,13 @@
 version: '3.1'
 services:
-  player-service:
-    container_name: player-service
-    build: ../
-    ports:
-      - "8085:8080"
-    depends_on:
-      - player-database
-    restart: always
+  #player-service:
+   # container_name: player-service
+   # build: ../
+   # ports:
+    #  - "8085:8085"
+    #depends_on:
+     # - player-database
+    #restart: always
 
   player-database:
     image: postgres:11
