@@ -2,9 +2,11 @@ package br.ufrn.dimap.collaborativecanvas.playerservice.controlers;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import br.ufrn.dimap.collaborativecanvas.playerservice.models.JogadaPlayerDTO;
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.LoginDTO;
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.Player;
 import br.ufrn.dimap.collaborativecanvas.playerservice.service.PlayerService;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @RestController
@@ -22,20 +25,20 @@ public class PlayerControler {
     @Autowired
     private PlayerService playerService;
 
+    @Cacheable(value = "players", key = "#id")
     @GetMapping("/{id}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long id) {
+    public Player getPlayerById(@PathVariable Long id) {
         Player player = playerService.getPlayerById(id);
         if (player != null) {
-            return ResponseEntity.ok(player);
+            return player;
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<Player>> getAllPlayers() {
-        List<Player> players = playerService.getAllPlayers();
-        return ResponseEntity.ok(players);
+    public List<Player> getAllPlayers() {
+        return playerService.getAllPlayers();
     }
 
 
@@ -45,36 +48,40 @@ public class PlayerControler {
         if (playerCreated != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(playerCreated);
         } else{
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         
     }
 
+    @CachePut(value = "players", key = "#id")
     @PutMapping("/{id}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Long id, @RequestBody Player player) {
+    public Player updatePlayer(@PathVariable Long id, @RequestBody Player player) {
         Player updatedPlayer = playerService.updatePlayer(id, player);
         if (updatedPlayer != null) {
-            return ResponseEntity.ok(updatedPlayer);
+            return player;
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
         }
     }
+
+    @CachePut(value = "players", key = "#jogada.id")
     @PostMapping("/play")
     public ResponseEntity<Player> updatePlayerMove(@RequestBody JogadaPlayerDTO jogada) {
         Player updatedPlayer = playerService.updatePlayerMove(jogada);
         if (updatedPlayer != null) {
             return ResponseEntity.ok(updatedPlayer);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
         }
     }
 
+    @CacheEvict(value = "players", key = "#id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
+    public String deletePlayer(@PathVariable Long id) {
         if (playerService.deletePlayer(id)) {
-            return ResponseEntity.noContent().build();
+            return "player deleted";
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
         }
     }
 
@@ -84,14 +91,13 @@ public class PlayerControler {
         if (playerLogin != null) {
             return ResponseEntity.ok(playerLogin);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         
     }
     @GetMapping("/ranking")
-    public ResponseEntity<List<Player>> getAllPlayersByRanking() {
-        List<Player> players = playerService.getAllPlayersByRanking();
-        return ResponseEntity.ok(players);
+    public List<Player> getAllPlayersByRanking() {
+        return playerService.getAllPlayersByRanking();
     }
     
 }

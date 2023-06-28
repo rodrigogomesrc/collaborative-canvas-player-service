@@ -3,9 +3,11 @@ package br.ufrn.dimap.collaborativecanvas.playerservice.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table
-public class Player {
+public class Player implements Serializable {
 	
 	@Id
 	@GeneratedValue
