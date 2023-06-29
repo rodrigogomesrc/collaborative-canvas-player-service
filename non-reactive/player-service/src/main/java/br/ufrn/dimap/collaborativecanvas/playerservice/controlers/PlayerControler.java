@@ -64,7 +64,7 @@ public class PlayerControler {
         }
     }
 
-    @CachePut(value = "players", key = "#jogada.id")
+    
     @PostMapping("/play")
     public ResponseEntity<Player> updatePlayerMove(@RequestBody JogadaPlayerDTO jogada) {
         Player updatedPlayer = playerService.updatePlayerMove(jogada);

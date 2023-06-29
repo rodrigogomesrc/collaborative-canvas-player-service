@@ -1,7 +1,9 @@
 package br.ufrn.dimap.collaborativecanvas.playerservice.models;
 
-public class LoginDTO {
-    private String name;
+import java.io.Serializable;
+
+public class LoginDTO{
+	private String name;
     private String password;
 
     public LoginDTO() {

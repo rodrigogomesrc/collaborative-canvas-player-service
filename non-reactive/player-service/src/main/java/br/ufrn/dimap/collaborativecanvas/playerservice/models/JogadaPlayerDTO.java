@@ -1,13 +1,15 @@
 package br.ufrn.dimap.collaborativecanvas.playerservice.models;
 
+import java.io.Serializable;
+
 public class JogadaPlayerDTO {
-    private Long id;
+	private Long playerId;
 
     public Long getId() {
-        return this.id;
+        return this.playerId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.playerId = id;
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import br.ufrn.dimap.collaborativecanvas.playerservice.models.JogadaPlayerDTO;
@@ -44,6 +45,7 @@ public class PlayerService {
             return null;
         }
     }
+    @CachePut(value = "players", key = "#jogada.id")
     public Player updatePlayerMove(JogadaPlayerDTO jogada){
         Optional<Player> existingPlayer = playerRepository.findById(jogada.getId());
         if (existingPlayer.isPresent()) {
