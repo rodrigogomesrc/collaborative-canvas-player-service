@@ -40,10 +40,8 @@ public class PlayerControler {
 
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/{id}")
     public Mono<Player> getPlayerById(@PathVariable Long id) {
-        System.out.println("antes de pegar o cache");
         return playerCache.get("player-by-id" + id).switchIfEmpty(
                 this.playerService.getPlayerById(id)
-                        .doOnNext(player -> System.out.println("vai salvar no cache"))
                         .flatMap(player -> this.playerCache.fastPut("player-by-id" + id, player).thenReturn(player))
         );
     }
