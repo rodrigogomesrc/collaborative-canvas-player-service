@@ -77,11 +77,14 @@ public class PlayerControler {
     }
 
 
+    /*
     @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/play")
     public Mono<Player> updatePlayerMove(@RequestBody JogadaPlayerDTO jogada) {
         return playerService.updatePlayerMove(jogada);
        
     }
+
+     */
 
     @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/login")
     public Mono<Player> login(@RequestBody LoginDTO login) {
