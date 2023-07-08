@@ -63,7 +63,6 @@ public class PlayerService {
     			.subscribeOn(Schedulers.boundedElastic());
     }
     public Mono<Player> updatePlayerMove(JogadaPlayerDTO jogada){
-		System.out.println("Jogada recebida: " + jogada.getId());
     	return playerRepository.findById(jogada.getId())
     			.subscribeOn(Schedulers.boundedElastic())
     			.map((p) -> {
