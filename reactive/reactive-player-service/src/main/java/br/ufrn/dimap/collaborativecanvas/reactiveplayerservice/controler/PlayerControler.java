@@ -4,6 +4,7 @@ import org.redisson.api.RMapCacheReactive;
 import org.redisson.api.RedissonReactiveClient;
 import org.redisson.codec.TypedJsonJacksonCodec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ import br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.service.PlayerSer
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/player")
@@ -85,6 +88,11 @@ public class PlayerControler {
     }
 
      */
+
+    @Bean
+    public Consumer<JogadaPlayerDTO> play() {
+        return jogadaPlayerDTO -> playerService.updatePlayerMove(jogadaPlayerDTO).subscribe();
+    }
 
     @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/login")
     public Mono<Player> login(@RequestBody LoginDTO login) {
