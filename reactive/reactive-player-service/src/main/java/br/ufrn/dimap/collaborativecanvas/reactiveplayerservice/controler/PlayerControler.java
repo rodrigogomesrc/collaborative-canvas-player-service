@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/player")
@@ -54,6 +55,7 @@ public class PlayerControler {
         return playerService.getAllPlayers();
     }
 
+    /*
     @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Mono<Player> addPlayer(@RequestBody Player player) {
         if (player.getName() == null || player.getPassword() == null){
@@ -63,6 +65,14 @@ public class PlayerControler {
         }
         
     }
+
+     */
+
+    @Bean
+    public Consumer<Player> addPlayer() {
+        return player -> playerService.addPlayer(player).subscribe();
+    }
+
 
     @PutMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/{id}")
     public Mono<Player> updatePlayer(@PathVariable Long id, @RequestBody Player player) {
@@ -91,13 +101,23 @@ public class PlayerControler {
 
     @Bean
     public Consumer<JogadaPlayerDTO> play() {
+        System.out.println("play");
         return jogadaPlayerDTO -> playerService.updatePlayerMove(jogadaPlayerDTO).subscribe();
     }
 
+    /*
     @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/login")
     public Mono<Player> login(@RequestBody LoginDTO login) {
 		return playerService.login(login);
     }
+
+     */
+
+    @Bean
+    public Consumer<LoginDTO> login() {
+        return loginDTO -> playerService.login(loginDTO).subscribe();
+    }
+
 
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/ranking")
     public Flux<Player> getAllPlayersByRanking() {

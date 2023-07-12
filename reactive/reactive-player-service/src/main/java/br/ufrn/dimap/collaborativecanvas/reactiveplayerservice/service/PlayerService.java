@@ -37,9 +37,11 @@ public class PlayerService {
         		.subscribeOn(Schedulers.boundedElastic());
     }
     public Mono<Player> addPlayer(Player player){
+		System.out.println("add player");
         return playerRepository.save(player)
         		.subscribeOn(Schedulers.boundedElastic());
     }
+
     public Mono<Player> updatePlayer(Long id, Player player){
     	return playerRepository.findById(id)
     			.subscribeOn(Schedulers.boundedElastic())
@@ -68,6 +70,7 @@ public class PlayerService {
     }
     
     public Mono<Player> login(LoginDTO login) {
+		System.out.println("login");
     	return playerRepository.findByNameAndPassword(login.getName(), login.getPassword())
     			.subscribeOn(Schedulers.boundedElastic());
     }
