@@ -28,11 +28,13 @@ public class PlayerService {
     
 	
 	public Mono<Player> getPlayerById(Long id){
+		System.out.println("get player by id");
         return playerRepository.findById(id)
         		.subscribeOn(Schedulers.boundedElastic());
     }
 
     public Flux<Player> getAllPlayers(){
+		System.out.println("get all players");
         return playerRepository.findAll()
         		.subscribeOn(Schedulers.boundedElastic());
     }
@@ -43,6 +45,7 @@ public class PlayerService {
     }
 
     public Mono<Player> updatePlayer(Long id, Player player){
+		System.out.println("update player");
     	return playerRepository.findById(id)
     			.subscribeOn(Schedulers.boundedElastic())
     			.map((p) -> {
@@ -55,6 +58,7 @@ public class PlayerService {
         	playerRepository.save(p));
     }
     public Mono<Void> deletePlayer(Long id){
+		System.out.println("delete player");
     	return playerRepository.deleteById(id)
     			.subscribeOn(Schedulers.boundedElastic());
     }
@@ -75,6 +79,7 @@ public class PlayerService {
     			.subscribeOn(Schedulers.boundedElastic());
     }
     public Flux<Player> getAllPlayersByRanking(){
+		System.out.println("get all players by ranking");
     	return playerRepository.findAllByOrderByPaintedPixelsDesc()
     			.subscribeOn(Schedulers.boundedElastic());
     }

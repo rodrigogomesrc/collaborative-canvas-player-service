@@ -42,6 +42,7 @@ public class PlayerControler {
         this.playerCache = redissonClient.getMapCache("/player/", new TypedJsonJacksonCodec(String.class, Player.class));
     }
 
+    /*
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/{id}")
     public Mono<Player> getPlayerById(@PathVariable Long id) {
         return playerCache.get("player-by-id" + id).switchIfEmpty(
@@ -50,9 +51,25 @@ public class PlayerControler {
         );
     }
 
+     */
+
+    @Bean
+    public Consumer<Long> getPlayerById() {
+        return id -> playerService.getPlayerById(id).subscribe();
+    }
+
+
+    /*
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Player> getAllPlayers() {
         return playerService.getAllPlayers();
+    }
+
+     */
+
+    @Bean
+    public Consumer<Void> getAllPlayers() {
+        return v -> playerService.getAllPlayers().subscribe();
     }
 
     /*
@@ -73,6 +90,7 @@ public class PlayerControler {
         return player -> playerService.addPlayer(player).subscribe();
     }
 
+    /*
 
     @PutMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/{id}")
     public Mono<Player> updatePlayer(@PathVariable Long id, @RequestBody Player player) {
@@ -82,11 +100,28 @@ public class PlayerControler {
         );
     }
 
+     */
+
+    @Bean
+    public Consumer<Player> updatePlayer() {
+        return player -> playerService.updatePlayer(player.getId(), player).subscribe();
+    }
+
+
+    /*
+
     @DeleteMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE, value = "/{id}")
     public Mono<Void> deletePlayer(@PathVariable Long id) {
         return playerService.deletePlayer(id)
                 .publishOn(Schedulers.boundedElastic())
                 .doOnSuccess(p -> playerCache.fastRemove("player-by-id" + id).subscribe());
+    }
+
+     */
+
+    @Bean
+    public Consumer<Long> deletePlayer() {
+        return id -> playerService.deletePlayer(id).subscribe();
     }
 
 
@@ -119,9 +154,17 @@ public class PlayerControler {
     }
 
 
+    /*
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE,value="/ranking")
     public Flux<Player> getAllPlayersByRanking() {
         return playerService.getAllPlayersByRanking();
+    }
+
+     */
+
+    @Bean
+    public Consumer<Void> getAllPlayersByRanking() {
+        return v -> playerService.getAllPlayersByRanking().subscribe();
     }
     
 
