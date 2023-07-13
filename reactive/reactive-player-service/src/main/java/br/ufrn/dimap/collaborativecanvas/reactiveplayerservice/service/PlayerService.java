@@ -3,6 +3,7 @@ package br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.model.UpdatePlayerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +45,10 @@ public class PlayerService {
         		.subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<Player> updatePlayer(Long id, Player player){
+    public Mono<Player> updatePlayer(UpdatePlayerDTO update){
 		System.out.println("update player");
+		Player player = update.getPlayer();
+		long id = update.getId();
     	return playerRepository.findById(id)
     			.subscribeOn(Schedulers.boundedElastic())
     			.map((p) -> {

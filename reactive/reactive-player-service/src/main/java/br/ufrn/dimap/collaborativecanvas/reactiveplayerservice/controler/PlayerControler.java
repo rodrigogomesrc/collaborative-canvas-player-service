@@ -1,5 +1,6 @@
 package br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.controler;
 
+import br.ufrn.dimap.collaborativecanvas.reactiveplayerservice.model.UpdatePlayerDTO;
 import org.redisson.api.RMapCacheReactive;
 import org.redisson.api.RedissonReactiveClient;
 import org.redisson.codec.TypedJsonJacksonCodec;
@@ -68,7 +69,7 @@ public class PlayerControler {
      */
 
     @Bean
-    public Consumer<Void> getAllPlayers() {
+    public Consumer<String> getAllPlayers() {
         return v -> playerService.getAllPlayers().subscribe();
     }
 
@@ -103,8 +104,8 @@ public class PlayerControler {
      */
 
     @Bean
-    public Consumer<Player> updatePlayer() {
-        return player -> playerService.updatePlayer(player.getId(), player).subscribe();
+    public Consumer<UpdatePlayerDTO> updatePlayer() {
+        return update -> playerService.updatePlayer(update).subscribe();
     }
 
 
@@ -163,7 +164,7 @@ public class PlayerControler {
      */
 
     @Bean
-    public Consumer<Void> getAllPlayersByRanking() {
+    public Consumer<String> getAllPlayersByRanking() {
         return v -> playerService.getAllPlayersByRanking().subscribe();
     }
     
