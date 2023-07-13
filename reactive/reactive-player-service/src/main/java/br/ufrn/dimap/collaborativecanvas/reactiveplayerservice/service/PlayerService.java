@@ -29,24 +29,24 @@ public class PlayerService {
     
 	
 	public Mono<Player> getPlayerById(Long id){
-		System.out.println("get player by id");
+		//System.out.println("get player by id");
         return playerRepository.findById(id)
         		.subscribeOn(Schedulers.boundedElastic());
     }
 
     public Flux<Player> getAllPlayers(){
-		System.out.println("get all players");
+		//System.out.println("get all players");
         return playerRepository.findAll()
         		.subscribeOn(Schedulers.boundedElastic());
     }
     public Mono<Player> addPlayer(Player player){
-		System.out.println("add player");
+		//System.out.println("add player");
         return playerRepository.save(player)
         		.subscribeOn(Schedulers.boundedElastic());
     }
 
     public Mono<Player> updatePlayer(UpdatePlayerDTO update){
-		System.out.println("update player");
+		//System.out.println("update player");
 		Player player = update.getPlayer();
 		long id = update.getId();
     	return playerRepository.findById(id)
@@ -61,12 +61,12 @@ public class PlayerService {
         	playerRepository.save(p));
     }
     public Mono<Void> deletePlayer(Long id){
-		System.out.println("delete player");
+		//System.out.println("delete player");
     	return playerRepository.deleteById(id)
     			.subscribeOn(Schedulers.boundedElastic());
     }
     public Mono<Player> updatePlayerMove(JogadaPlayerDTO jogada){
-		System.out.println("update player move");
+		//System.out.println("update player move");
     	return playerRepository.findById(jogada.getId())
     			.subscribeOn(Schedulers.boundedElastic())
     			.map((p) -> {
@@ -77,12 +77,12 @@ public class PlayerService {
     }
     
     public Mono<Player> login(LoginDTO login) {
-		System.out.println("login");
+		//System.out.println("login");
     	return playerRepository.findByNameAndPassword(login.getName(), login.getPassword())
     			.subscribeOn(Schedulers.boundedElastic());
     }
     public Flux<Player> getAllPlayersByRanking(){
-		System.out.println("get all players by ranking");
+		//System.out.println("get all players by ranking");
     	return playerRepository.findAllByOrderByPaintedPixelsDesc()
     			.subscribeOn(Schedulers.boundedElastic());
     }
